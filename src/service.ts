@@ -8,6 +8,7 @@ export function getTimeline(): Promise<TimelineDTO> {
     return send(url, { method: 'GET' });
 }    
 
+
 export function getTweet() {
     return 2;
 }
