@@ -1,4 +1,5 @@
 import * as React from 'react';
+import 'antd/dist/antd.css';
 import './App.css';
 import Principal from './Principal';
 

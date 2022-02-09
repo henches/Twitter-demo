@@ -36,3 +36,48 @@
     transform: rotate(360deg);
   }
 }
+
+.horizontal {
+  display: flex;
+  flex-direction: horizontal;
+
+}
+
+.photo {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5%;
+}
+
+.avatar {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
+.name {
+  font-size: 3vw;
+  font-weight: bold;
+  margin-right: 2vw;
+}
+
+.username {
+  font-size: 3vw;
+  font-weight: normal;
+}
+
+.since {
+  font-size: 2vw;
+  font-weight: normal;
+}
+
+.text {
+  font-size: 3vw;
+  text-align: left;
+}
+
+.votes {
+  font-size: 3vw;
+  font-weight: normal;
+}
+

@@ -1,7 +1,10 @@
+import AttachmentsDTO from "./AttachmentsDTO";
+
 type TweetDTO = {
     id: string,
     text: string,
-    author_id: number,
+    attachments: AttachmentsDTO,
+    author_id: string
 };
 
 export default TweetDTO;
