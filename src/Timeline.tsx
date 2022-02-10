@@ -5,26 +5,25 @@ import TweetsContainerDTO from './DTO/TweetsContainerDTO';
 import UsersContainerDTO from './DTO/UserContainerDTO';
 import TweetTest from './TweetTest';
 import TweetUID from './UID/TweetUID';
-import * as serviceV1 from './twitterServiceV1'
-import * as serviceV2 from './twitterServiceV2'
+import * as backendService from './backendService'
 
 export default function Timeline() {
     const [timelineTweets, setTimelineTweets] = React.useState<MiniTweetDTO[]>();
     const [tweetsContainer, setTweetsContainer] = React.useState<TweetsContainerDTO>();
     const [usersContainer, setUsersContainer] = React.useState<UsersContainerDTO>();
 
-    React.useEffect(() => {
-        serviceV1.getHomeTimeline()
+    React.useEffect(() => { // get home timeline tweet Ids
+        backendService.getHomeTimeline()
             .then(setTimelineTweets)
             .catch(error => {
                 console.log(error)
             });
     }, []);
     
-    React.useEffect(() => {
+    React.useEffect(() => { // get related tweets with tweet ids
         if (timelineTweets) {
             const tweetIds = timelineTweets.map(miniTweet => miniTweet.id_str);
-            serviceV2.getTweets(tweetIds)
+            backendService.getTweets(tweetIds)
                 .then(setTweetsContainer)
                 .catch(error => {
                     console.log(error)
@@ -32,10 +31,32 @@ export default function Timeline() {
         }
     }, [timelineTweets]);
 
-    React.useEffect(() => {
+    React.useEffect(() => { // get related users
         if (tweetsContainer) {
-            const authorIds = tweetsContainer.data.map(tweet => tweet.author_id);
-            serviceV2.getUsers(authorIds)
+            const authorIds = tweetsContainer.includes.users.map(user => user.id);
+            backendService.getUsers(authorIds)
+                .then(setUsersContainer)
+                .catch(error => {
+                    console.log(error)
+            });
+        }
+    }, [tweetsContainer]);
+
+        React.useEffect(() => { // get related tweets with tweet ids
+        if (timelineTweets) {
+            const tweetIds = timelineTweets.map(miniTweet => miniTweet.id_str);
+            backendService.getTweets(tweetIds)
+                .then(setTweetsContainer)
+                .catch(error => {
+                    console.log(error)
+            });
+        }
+    }, [timelineTweets]);
+
+    React.useEffect(() => { // get related users
+        if (tweetsContainer) {
+            const authorIds = tweetsContainer.includes.users.map(user => user.id);
+            backendService.getUsers(authorIds)
                 .then(setUsersContainer)
                 .catch(error => {
                     console.log(error)
