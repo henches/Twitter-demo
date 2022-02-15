@@ -28,7 +28,7 @@ export function getHomeTimeline(): Promise<MiniTweetDTO[]> {
 }
 
 export function getTweets(tweetIds: string[]): Promise<TweetsContainerDTO> {
-  //console.log("getTweets");
+  //console.log("getTweets tweetIds = ", tweetIds);
   return clientV2.get('tweets', {
     "ids": tweetIds.join(','),
     "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
@@ -38,7 +38,7 @@ export function getTweets(tweetIds: string[]): Promise<TweetsContainerDTO> {
 }
 
 export function getUsers(userIds: string[]): Promise<UsersContainerDTO> {
-  console.log("getUser userIds = ", userIds);
+  //console.log("getUser userIds = ", userIds);
   return clientV2.get('users', {
     "ids": userIds.join(','),
     "user.fields": "profile_image_url"

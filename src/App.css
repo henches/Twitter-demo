@@ -81,3 +81,18 @@
   font-weight: normal;
 }
 
+.retweet-text {
+  font-size: 3vw;
+  color: grey;
+  font-weight: bold;
+  height: 6vw;
+}
+
+.retweet-icon {
+  font-size: 3vw;
+  color: grey;
+  font-weight: bold;
+  margin-right: 1vw;
+  height: 6vw;
+}
+

@@ -1,9 +1,9 @@
+import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { List } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import * as React from 'react';
-import TweetUID from './UID/TweetUID';
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import IconText from './IconText';
+import TweetUID from './UID/TweetUID';
 
 
 export type TweetProps = {
@@ -11,7 +11,7 @@ export type TweetProps = {
 }
 
 export default function Tweet(props: TweetProps) {
-    console.log('props.tweet = ', props.tweet, ' props.tweet.id = ', props.tweet.id, ' props.tweet.userName = ', props.tweet.user.name);
+    //console.log('props.tweet = ', props.tweet, ' props.tweet.id = ', props.tweet.id, ' props.tweet.userName = ', props.tweet.user.name);
     return (
         <List.Item
             key={props.tweet.id}
