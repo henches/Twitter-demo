@@ -1,7 +1,8 @@
 import TwitterLite from 'twitter-lite';
 import MiniTweetDTO from './DTO/MiniTeetDTO';
 import TweetsContainerDTO from './DTO/TweetsContainerDTO';
-import UsersContainerDTO from './DTO/UserContainerDTO';
+import UserContainerDTO from './DTO/UserContainerDTO';
+import UsersContainerDTO from './DTO/UsersContainerDTO';
 
 const keys = {
   consumer_key:         'Wz2RoXSfyO5tCgzSMyyh4GtXr',
@@ -17,33 +18,38 @@ const clientV1 = new TwitterLite({
 });
 
 const clientV2 = new TwitterLite({
-  extension: false, // "api" is the default (change for other subdomains)
-  version: "2", // version "1.1" is the default (change for other subdomains)
+  extension: false,
+  version: "2",
   ...keys
 });
 
 export function getHomeTimeline(): Promise<MiniTweetDTO[]> {
-  //console.log("getHomeTimeline");
   return clientV1.get('statuses/home_timeline');
 }
 
 export function getTweets(tweetIds: string[]): Promise<TweetsContainerDTO> {
-  //console.log("getTweets tweetIds = ", tweetIds);
   return clientV2.get('tweets', {
     "ids": tweetIds.join(','),
     "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
-    "tweet.fields": "author_id,conversation_id",
+    "tweet.fields": "author_id,conversation_id,public_metrics",
     "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
   });
 }
 
 export function getUsers(userIds: string[]): Promise<UsersContainerDTO> {
-  //console.log("getUser userIds = ", userIds);
   return clientV2.get('users', {
     "ids": userIds.join(','),
     "user.fields": "profile_image_url"
   });
 }
+
+
+export function getMe(): Promise<UserContainerDTO> {
+  return clientV2.get('users/me', {
+    "user.fields": "profile_image_url"
+  });
+}
+
 
 
 

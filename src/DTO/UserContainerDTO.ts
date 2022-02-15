@@ -1,7 +1,7 @@
 import UserDTO from "./UserDTO";
 
-type UsersContainerDTO = {
-    data: UserDTO[]
+type UserContainerDTO = {
+    data: UserDTO
 };
 
-export default UsersContainerDTO;
+export default UserContainerDTO;

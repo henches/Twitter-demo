@@ -1,8 +1,8 @@
+import TweetDTO from "../DTO/TweetDTO";
 import UserDTO from "../DTO/UserDTO";
 
 type TweetUID = {
-    id: string,
-    text: string,
+    tweet: TweetDTO,
     firstPhotoUrl?: string
     user: UserDTO,
     referencedUidTweet?: TweetUID
