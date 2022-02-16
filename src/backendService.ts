@@ -1,16 +1,10 @@
 import TwitterLite from 'twitter-lite';
+import keys from './config.json';
 import MiniTweetDTO from './DTO/MiniTeetDTO';
 import TweetsContainerDTO from './DTO/TweetsContainerDTO';
 import UserContainerDTO from './DTO/UserContainerDTO';
 import UsersContainerDTO from './DTO/UsersContainerDTO';
 
-const keys = {
-  consumer_key:         'Wz2RoXSfyO5tCgzSMyyh4GtXr',
-  consumer_secret:      'Z75yjvRYj2q23y56iEJbkkiQ38WKc8mspE2LJ4wq808dZWVoLt',
-  access_token_key:     '27926912-lUV73OvT7tPytqnksiPa1szg48WnZZsVxqRm0KYXD',
-  access_token_secret:  '0f0aEaQXGpc6l0dIqCFAGbSDZ28dD6w8TJYfchNyTDwxz'
-
-}
 const clientV1 = new TwitterLite({
   subdomain: "api", // "api" is the default (change for other subdomains)
   version: "1.1", // version "1.1" is the default (change for other subdomains)

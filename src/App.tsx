@@ -16,7 +16,7 @@ function App() {
   React.useEffect(() => {
     backendService.getMe()
       .then(setUserMeContainer)
-      .catch(error => console.log(error))
+      .catch(error => console.log("errorMe = " , error))
   }, []);
 
   return (

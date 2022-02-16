@@ -1,10 +1,10 @@
-import { Divider, List } from 'antd';
+import { Divider, List, notification } from 'antd';
 import * as React from 'react';
 import * as backendService from './backendService';
 import TweetDTO from './DTO/TweetDTO';
 import TweetsContainerDTO from './DTO/TweetsContainerDTO';
 import UsersContainerDTO from './DTO/UsersContainerDTO';
-import TweetTest from './Tweet';
+import Tweet from './Tweet';
 import TweetUID from './UID/TweetUID';
 
 export default function Timeline() {
@@ -51,7 +51,17 @@ export default function Timeline() {
             setIsDataLoaded(true);
         })
         .catch(error => {
-            console.log(error)
+            let errorMessage;
+            if ('errors' in error) { // Twitter API error
+                errorMessage = `${error.errors[0].message} code: ${error.errors[0].code}` 
+            } else {  // non-API error, e.g. network problem or invalid JSON in response
+                errorMessage = 'Erreur non-API : ex : problèmes réseau ou JSON de réponse invalide';
+            }
+            console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRORRRRRRRRRRRRRRR errorMessage = ", errorMessage);
+            notification['error']({
+                message: "Erreur d'accès à l'API Twitter",
+                description: errorMessage,
+            });
         });
     }, []);
 
@@ -111,7 +121,7 @@ export default function Timeline() {
             renderItem={
                 uidTweet => 
                     <>
-                        <TweetTest tweet={uidTweet}/>
+                        <Tweet tweet={uidTweet}/>
                         <Divider/>
                     </> 
             }
