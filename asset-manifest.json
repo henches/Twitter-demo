@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/henches/twitter-demo.git/static/css/main.c123bcec.css",
-    "main.js": "/henches/twitter-demo.git/static/js/main.9d67b17d.js",
-    "index.html": "/henches/twitter-demo.git/index.html",
-    "main.c123bcec.css.map": "/henches/twitter-demo.git/static/css/main.c123bcec.css.map",
-    "main.9d67b17d.js.map": "/henches/twitter-demo.git/static/js/main.9d67b17d.js.map"
+    "main.css": "/twitter-demo/static/css/main.c123bcec.css",
+    "main.js": "/twitter-demo/static/js/main.9d67b17d.js",
+    "index.html": "/twitter-demo/index.html",
+    "main.c123bcec.css.map": "/twitter-demo/static/css/main.c123bcec.css.map",
+    "main.9d67b17d.js.map": "/twitter-demo/static/js/main.9d67b17d.js.map"
   },
   "entrypoints": [
     "static/css/main.c123bcec.css",
