@@ -1,69 +1,55 @@
-import { Divider, List, notification } from 'antd';
+import { Divider, List } from 'antd';
 import * as React from 'react';
 import * as backendService from './backendService';
 import TweetDTO from './DTO/TweetDTO';
 import TweetsContainerDTO from './DTO/TweetsContainerDTO';
 import UsersContainerDTO from './DTO/UsersContainerDTO';
 import Tweet from './Tweet';
-import TweetUID from './UID/TweetUID';
+import TweetUIO from './UIO/TweetUIO';
+import { raiseError } from './utils';
 
-export default function Timeline() {
-    const [tweetsContainer, setTweetsContainer] = React.useState<TweetsContainerDTO>();
+export type TimelineProps = {
+    tweetsContainer: TweetsContainerDTO | undefined;
+    label: string
+}
+
+export default function Timeline(props: TimelineProps) {
     const [usersContainer, setUsersContainer] = React.useState<UsersContainerDTO>();
     const [referencedTweetsContainer, setReferencedTweetsContainer] = React.useState<TweetsContainerDTO>();
     const [referencedUsersContainer, setReferencedUsersContainer] = React.useState<UsersContainerDTO>();
-    const [uidTweets, setUidTweets] = React.useState<TweetUID[]>();
+    const [uioTweets, setUioTweets] = React.useState<TweetUIO[]>();
     const [isDataLoaded, setIsDataLoaded] = React.useState<boolean>(false);
 
-
     React.useEffect(() => { 
-        setIsDataLoaded(false);
-        backendService.getHomeTimeline() // get home timeline tweet Ids
-        .then(miniTweets => {
-            const tweetIds = miniTweets.map(miniTweet => miniTweet.id_str);
-            return backendService.getTweets(tweetIds) // get tweets with tweet ids
-        })
-        .then(myTweetContainer => {
-            setTweetsContainer(myTweetContainer);
-            if (myTweetContainer) {
-                const authorIds = myTweetContainer.includes.users.map(user => user.id); // TODO : en faire un ensemble unique ?
-                const usersPromise: Promise<UsersContainerDTO> = backendService.getUsers(authorIds); // get related users
+        if (props.tweetsContainer) {
+            setIsDataLoaded(false);
 
-                const referencedTweetIds: string[] = [];
-                myTweetContainer.data.forEach(tweet => {
-                    if (tweet.referenced_tweets) {
-                        referencedTweetIds.push(tweet.referenced_tweets[0].id)
-                    };
-                });
-                const referencedTweetsPromise: Promise<TweetsContainerDTO> = backendService.getTweets(referencedTweetIds); // get re-tweets
-                return Promise.all([usersPromise, referencedTweetsPromise]);
-            }
-        })
-        .then(values => {
-            const [usersContainer, referencedTweetsContainer] = values!;
-            setUsersContainer(usersContainer);
-            setReferencedTweetsContainer(referencedTweetsContainer);
-            const authorIds = referencedTweetsContainer.includes.users.map(user => user.id); // get re-users
-            return backendService.getUsers(authorIds)
-        })
-        .then(referenceUsersContainer => {
-            setReferencedUsersContainer(referenceUsersContainer);
-            setIsDataLoaded(true);
-        })
-        .catch(error => {
-            let errorMessage;
-            if ('errors' in error) { // Twitter API error
-                errorMessage = `${error.errors[0].message} code: ${error.errors[0].code}` 
-            } else {  // non-API error, e.g. network problem or invalid JSON in response
-                errorMessage = 'Erreur non-API : ex : problèmes réseau ou JSON de réponse invalide';
-            }
-            console.log("ERRRRRRRRRRRRRRRRRRRRRRRRRRRRORRRRRRRRRRRRRRR errorMessage = ", errorMessage);
-            notification['error']({
-                message: "Erreur d'accès à l'API Twitter",
-                description: errorMessage,
+            const authorIds = props.tweetsContainer.includes.users.map(user => user.id); // TODO : en faire un ensemble unique ?
+            const usersPromise: Promise<UsersContainerDTO> = backendService.getUsers(authorIds); // get related users
+
+            const referencedTweetIds: string[] = [];
+            props.tweetsContainer.data.forEach(tweet => {
+                if (tweet.referenced_tweets) {
+                    referencedTweetIds.push(tweet.referenced_tweets[0].id)
+                };
             });
-        });
-    }, []);
+            const referencedTweetsPromise: Promise<TweetsContainerDTO> = backendService.getTweetsByIds(referencedTweetIds); // get re-tweets
+
+            Promise.all([usersPromise, referencedTweetsPromise])
+            .then(values => {
+                const [usersContainer, referencedTweetsContainer] = values!;
+                setUsersContainer(usersContainer);
+                setReferencedTweetsContainer(referencedTweetsContainer);
+                const authorIds = referencedTweetsContainer.includes.users.map(user => user.id); // get re-users
+                return backendService.getUsers(authorIds)
+            })
+            .then(referenceUsersContainer => {
+                setReferencedUsersContainer(referenceUsersContainer);
+                setIsDataLoaded(true);
+            })
+            .catch(raiseError)
+        }
+    }, [props.tweetsContainer]);
 
     function getFirstPhoto(tweet: TweetDTO, tweetsContainer: TweetsContainerDTO) {
         if (!tweet.attachments) {
@@ -80,14 +66,13 @@ export default function Timeline() {
         return theMedia?.url;  
     }
 
-    
     React.useEffect(() => {
         if (!isDataLoaded) {
             return;
         }
-        const myUidTweets =  tweetsContainer?.data.map(tweet => {
-            let referencedUidTweet: TweetUID | undefined = undefined;
-            const firstPhotoUrl = getFirstPhoto(tweet, tweetsContainer);
+        const myUioTweets =  props.tweetsContainer?.data.map(tweet => {
+            let referencedUioTweet: TweetUIO | undefined = undefined;
+            const firstPhotoUrl = getFirstPhoto(tweet, props.tweetsContainer!);
             const user = usersContainer?.data.find(user => user.id === tweet.author_id);
             if (!user) {
                 throw Error(`ERROR : no user found for tweetId '${tweet.id}'`);
@@ -95,7 +80,7 @@ export default function Timeline() {
             if (tweet.referenced_tweets && tweet.referenced_tweets[0] && tweet.referenced_tweets[0].type === 'retweeted' ) {
                 const referencedTweet = referencedTweetsContainer!.data.find(referencedTweet => referencedTweet.id === tweet.referenced_tweets[0].id);
                 const referencedUser = referencedUsersContainer!.data.find(referencedUser => referencedUser.id === referencedTweet?.author_id)!;
-                referencedUidTweet = {
+                referencedUioTweet = {
                     tweet: {...referencedTweet!},
                     firstPhotoUrl: getFirstPhoto(referencedTweet!, referencedTweetsContainer!),
                     user: {...referencedUser}
@@ -104,27 +89,30 @@ export default function Timeline() {
             return {
                 tweet: {...tweet},
                 firstPhotoUrl: firstPhotoUrl,
-                referencedUidTweet: referencedUidTweet,
+                referencedUioTweet: referencedUioTweet,
                 user: {...user}
             }
         });
-        setUidTweets(myUidTweets);
+        setUioTweets(myUioTweets);
 
 
-    }, [isDataLoaded, tweetsContainer, usersContainer, referencedTweetsContainer, referencedUsersContainer] );
+    }, [isDataLoaded, props.tweetsContainer, usersContainer, referencedTweetsContainer, referencedUsersContainer] );
 
     return (
-        <List className="timeline"
-            itemLayout="vertical"
-            bordered
-            dataSource={uidTweets}                
-            renderItem={
-                uidTweet => 
-                    <>
-                        <Tweet tweet={uidTweet}/>
-                        <Divider/>
-                    </> 
-            }
-        />
+        <div className="timeline">
+            <div>{props.label}</div>
+            <List 
+                itemLayout="vertical"
+                bordered
+                dataSource={uioTweets}                
+                renderItem={
+                    uioTweet => 
+                        <>
+                            <Tweet uioTweet={uioTweet}/>
+                            <Divider/>
+                        </> 
+                }
+            />
+        </div>
     );
 }

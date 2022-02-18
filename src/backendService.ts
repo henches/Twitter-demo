@@ -21,11 +21,27 @@ export function getHomeTimeline(): Promise<MiniTweetDTO[]> {
   return clientV1.get('statuses/home_timeline');
 }
 
-export function getTweets(tweetIds: string[]): Promise<TweetsContainerDTO> {
+export function getUserTweets(userId: string): Promise<TweetsContainerDTO> {
+  return clientV2.get(`users/${userId}/tweets`, {
+    "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
+    "tweet.fields": "author_id,conversation_id,public_metrics,entities",
+    "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
+  });
+}
+
+export function getUserMentionsTweets(userId: string): Promise<TweetsContainerDTO> {
+  return clientV2.get(`users/${userId}/tweets`, {
+    "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
+    "tweet.fields": "author_id,conversation_id,public_metrics,entities",
+    "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
+  });
+}
+
+export function getTweetsByIds(tweetIds: string[]): Promise<TweetsContainerDTO> {
   return clientV2.get('tweets', {
     "ids": tweetIds.join(','),
     "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
-    "tweet.fields": "author_id,conversation_id,public_metrics",
+    "tweet.fields": "author_id,conversation_id,public_metrics,entities",
     "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
   });
 }
@@ -37,13 +53,8 @@ export function getUsers(userIds: string[]): Promise<UsersContainerDTO> {
   });
 }
 
-
 export function getMe(): Promise<UserContainerDTO> {
   return clientV2.get('users/me', {
     "user.fields": "profile_image_url"
   });
 }
-
-
-
-

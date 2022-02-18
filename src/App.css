@@ -9,12 +9,27 @@
   align-items: baseline;
 }
 
-.sider {
+.content {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: start;
+  align-items: flex-start;
+}
+
+.sider {
+  background-color: lightGrey;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  height: 100%
 }
 
 .timeline {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
   width: 30rem;
 }
 

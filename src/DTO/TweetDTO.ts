@@ -8,7 +8,8 @@ type TweetDTO = {
     attachments: AttachmentsDTO,
     author_id: string,
     referenced_tweets: ReferencedTweetDTO[],
-    public_metrics: MetricsDTO
+    public_metrics: MetricsDTO,
+    entities: any
 };
 
 export default TweetDTO;
