@@ -4,13 +4,16 @@ import * as backendService from './backendService';
 import TweetDTO from './DTO/TweetDTO';
 import TweetsContainerDTO from './DTO/TweetsContainerDTO';
 import UsersContainerDTO from './DTO/UsersContainerDTO';
+import TimelineTitle from './TimelineTitle';
 import Tweet from './Tweet';
 import TweetUIO from './UIO/TweetUIO';
 import { raiseError } from './utils';
 
 export type TimelineProps = {
     tweetsContainer: TweetsContainerDTO | undefined;
-    label: string
+    title: string,
+    icon: JSX.Element,
+    username: string | undefined
 }
 
 export default function Timeline(props: TimelineProps) {
@@ -96,12 +99,12 @@ export default function Timeline(props: TimelineProps) {
         setUioTweets(myUioTweets);
 
 
-    }, [isDataLoaded, props.tweetsContainer, usersContainer, referencedTweetsContainer, referencedUsersContainer] );
+    }, [isDataLoaded, props.tweetsContainer, usersContainer, referencedTweetsContainer, referencedUsersContainer]);
 
     return (
         <div className="timeline">
-            <div>{props.label}</div>
-            <List 
+            <TimelineTitle title={props.title} icon={props.icon} username={props.username}/>
+            <List className="timeline-content"
                 itemLayout="vertical"
                 bordered
                 dataSource={uioTweets}                

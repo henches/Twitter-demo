@@ -33,8 +33,35 @@
   width: 30rem;
 }
 
+.timeline-content {
+  padding: 0.5rem 0;
+}
+
+.timeline-title {
+  border: 1px solid lightgray;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  padding: 0.5rem 1rem;
+}
+
+.timeline-title-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.timeline-title-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.timeline-title-username {
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+
 .tweet {
-  margin-right: 0.5vw
+  margin-right: 1rem
 }
 
 .photo {

@@ -17,32 +17,28 @@ const clientV2 = new TwitterLite({
   ...keys
 });
 
+const TWEETS_REQUEST_PARAMETERS = {
+  "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
+  "tweet.fields": "author_id,conversation_id,public_metrics,entities",
+  "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
+}
+
 export function getHomeTimeline(): Promise<MiniTweetDTO[]> {
   return clientV1.get('statuses/home_timeline');
 }
 
-export function getUserTweets(userId: string): Promise<TweetsContainerDTO> {
-  return clientV2.get(`users/${userId}/tweets`, {
-    "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
-    "tweet.fields": "author_id,conversation_id,public_metrics,entities",
-    "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
-  });
+export function getUserTimeline(userId: string): Promise<TweetsContainerDTO> {
+  return clientV2.get(`users/${userId}/tweets`, TWEETS_REQUEST_PARAMETERS);
 }
 
 export function getUserMentionsTweets(userId: string): Promise<TweetsContainerDTO> {
-  return clientV2.get(`users/${userId}/tweets`, {
-    "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
-    "tweet.fields": "author_id,conversation_id,public_metrics,entities",
-    "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
-  });
+  return clientV2.get(`users/${userId}/mentions`, TWEETS_REQUEST_PARAMETERS);
 }
 
 export function getTweetsByIds(tweetIds: string[]): Promise<TweetsContainerDTO> {
   return clientV2.get('tweets', {
     "ids": tweetIds.join(','),
-    "expansions": "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id",
-    "tweet.fields": "author_id,conversation_id,public_metrics,entities",
-    "media.fields": "height,media_key,preview_image_url,type,url,width,alt_text"
+    ...TWEETS_REQUEST_PARAMETERS
   });
 }
 

@@ -31,7 +31,7 @@ export default function Tweet(props: TweetProps) {
             <Row>
                 <Col span={4}>
                     <Row justify="center">
-                        <img alt="avatar" src={originalUioTweet.user.profile_image_url} className="sider-menu-item"/>
+                        <img alt="avatar" src={originalUioTweet.user.profile_image_url} className="avatar"/>
                     </Row>
                 </Col>
                 <Col span={20}>
@@ -43,15 +43,6 @@ export default function Tweet(props: TweetProps) {
                         <div className="since">3h</div>    
                     </Row>
                     <Row>
-                        {/* <div className="text">
-                            <div dangerouslySetInnerHTML={{ 
-                                __html: twttr.autoLink(originalUioTweet.tweet.text, {
-                                            invisibleTagAttrs: "style='font-size:0'",
-                                            urlEntities: originalUioTweet.tweet.entities
-                                        })
-                                }}>
-                            </div>    
-                        </div> */}
                         <div className="text">
                             <div dangerouslySetInnerHTML={{ 
                                     __html: twttr.autoLink(originalUioTweet.tweet.text, originalUioTweet.tweet.entities)
@@ -60,7 +51,7 @@ export default function Tweet(props: TweetProps) {
                         </div>
                     </Row>
                     <Row>
-                        {originalUioTweet.firstPhotoUrl && <img alt="fuck" src={originalUioTweet.firstPhotoUrl} className="photo"/>}
+                        {originalUioTweet.firstPhotoUrl && <img alt="" src={originalUioTweet.firstPhotoUrl} className="photo"/>}
                     </Row>
                     <Row>
                         <Space size={20}>
